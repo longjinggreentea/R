@@ -1,4 +1,8 @@
-
+# read in data
+OV.clin.merge <- read.delim("OV_clin_merged.txt", header = FALSE, fill = TRUE)
+rownames(OV.clin.merge) <- OV.clin.merge[,1]
+OV.clin.merge <- OV.clin.merge[, -1]
+patient.ID.ov.clin <- toupper(as.character(unlist(OV.clin.merge[19, ])))
 
 # working on vital status: 
 vital.status.ind <- grep("vital_status",rownames(OV.clin.merge))
@@ -7,35 +11,59 @@ colnames(vital.status.mat) <- patient.ID.ov.clin
 ## collapse vital.status
 vital.status.collapsed <- c()
 for (i in 1:dim(vital.status.mat)[2]){
-if (length(which(vital.status.mat[,i]=="dead")) > 0){
-vital.status.collapsed <- c(vital.status.collapsed, "dead")
-} else { 
+    if (length(which(vital.status.mat[,i]=="dead")) > 0){
+         vital.status.collapsed <- c(vital.status.collapsed, "dead")
+     } else { 
     vital.status.collapsed <- c(vital.status.collapsed, "alive")  
-  }   
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+       }   
+  }
+ table(vital.status.collapsed) 
+ names(vital.status.collapsed) <- patient.ID.ov.clin
+ length(which(vital.status.collapsed=="alive"))
 
 # working on days-to-death:
-
+days.to.death.ind <- grep("days_to_death", rownames(OV.clin.merge))
+days.to.death.mat <- OV.clin.merge[days.to.death.ind, ]
+colnames(days.to.death.mat) <- patient.ID.ov.clin
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+ ## collapse days.to.death                      
+ days.to.death.collapsed <- c()
+for(i in 1:ncol(days.to.death.mat)){
+    if (sum((is.na(days.to.death.mat[,i])==TRUE)) < nrow(days.to.death.mat)){
+    m.day.death <- min(as.numeric(as.character(unlist(days.to.death.mat[,i]))), na.rm=T)
+    days.to.death.collapsed <- c(days.to.death.collapsed, m.day.death)
+  } else {
+    days.to.death.collapsed <- c(days.to.death.collapsed, NA)
+    }
+  }
+names(days.to.death.collapsed) <- patient.ID.ov.clin
+length(which(is.na(days.to.death.collapsed))) # 248
 
 
 # working on days-to-last-follow-up:
-
-
-
-
-
+last.follow.up.ind <- grep("last_followup", rownames(OV.clin.merge))
+last.follow.up.mat <- OV.clin.merge[last.follow.up.ind, ]
+colnames(last.follow.up.mat) <- patient.ID.ov.clin
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+                       "TCGA-72-4240", "TCGA-72-4241")] <- rep(NA, 10)
+rownames(last.follow.up.mat)
+last.followup.collapsed <- c()
+for (i in 1:ncol(last.follow.up.mat)) {
+ if(sum(is.na(last.follow.up.mat[, i])) < nrow(last.follow.up.mat)){
+    m.fl <- max(as.numeric(as.character(last.follow.up.mat[,i])), na.rm=T) 
+    last.followup.collapsed <- c(last.followup.collapsed, m.fl)
+ } else {
+  last.followup.collapsed <- c(last.followup.collapsed, NA)
+ }
+}
+length(which(is.na(last.followup.collapsed))) 
+names(last.followup.collapsed) <- patient.ID.ov.clin
+last.followup.collapsed.NUM <- as.numeric(last.followup.collapsed) 
+names(last.followup.collapsed.NUM) <- patient.ID.ov.clin 
 
 
