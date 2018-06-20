@@ -1,0 +1,41 @@
+
+
+# working on vital status: 
+vital.status.ind <- grep("vital_status",rownames(OV.clin.merge))
+vital.status.mat <- OV.clin.merge[vital.status.ind, ]
+colnames(vital.status.mat) <- patient.ID.ov.clin
+## collapse vital.status
+vital.status.collapsed <- c()
+for (i in 1:dim(vital.status.mat)[2]){
+if (length(which(vital.status.mat[,i]=="dead")) > 0){
+vital.status.collapsed <- c(vital.status.collapsed, "dead")
+} else { 
+    vital.status.collapsed <- c(vital.status.collapsed, "alive")  
+  }   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# working on days-to-death:
+
+
+
+# working on days-to-last-follow-up:
+
+
+
+
+
+
+
